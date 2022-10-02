@@ -8,6 +8,7 @@ const taskSchema = new mongoose.Schema({
         lowercase: true,
         maxlength: [20, "name's length cannot be more than 20"],
         minlength: [2, "name's length cannot be less than 2"],
+        lowercase: true,
     },
     completed: {
         type: Boolean,
