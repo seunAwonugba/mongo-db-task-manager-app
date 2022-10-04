@@ -3,11 +3,10 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Name cannot be empty"],
+        required: [true, "Task cannot be empty"],
         trim: true,
         lowercase: true,
-        maxlength: [20, "name's length cannot be more than 20"],
-        minlength: [2, "name's length cannot be less than 2"],
+        minlength: [2, "Task's length cannot be less than 2"],
         lowercase: true,
     },
     completed: {

@@ -58,12 +58,10 @@ const updateTask = async (req, res) => {
         const { id } = req.params;
         const body = req.body;
         const options = {
-            runValidators: true,
             new: true,
+            runValidators: true,
             overwrite: true,
         };
-
-        console.log(body);
 
         const updateTask = await taskModel.findByIdAndUpdate(id, body, options);
 
@@ -80,7 +78,6 @@ const updateTask = async (req, res) => {
             return;
         }
     } catch (err) {
-        console.log(err);
         res.status(500).json({
             success: true,
             data: err,
