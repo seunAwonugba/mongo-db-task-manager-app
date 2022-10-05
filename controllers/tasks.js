@@ -72,14 +72,14 @@ const updateTask = async (req, res) => {
             });
         } else {
             res.status(404).json({
-                success: true,
+                success: false,
                 data: "Resource not found",
             });
             return;
         }
     } catch (err) {
         res.status(500).json({
-            success: true,
+            success: false,
             data: err,
         });
     }

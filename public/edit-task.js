@@ -54,9 +54,17 @@ editFormDOM.addEventListener("submit", async (e) => {
         formAlertDOM.textContent = `success, edited task`;
         formAlertDOM.classList.add("text-success");
     } catch (error) {
+        const errorCode = error.response.status;
+        if (Number(errorCode == 500)) {
+            formAlertDOM.innerHTML =
+                error.response.data.data.errors.name.message;
+        } else {
+            formAlertDOM.innerHTML = error.response.data.data;
+        }
+        // error.response.data.data.errors.name.message
+        // );
         taskNameDOM.value = tempName;
         formAlertDOM.style.display = "block";
-        formAlertDOM.innerHTML = error.response.data.data;
     }
     editBtnDOM.textContent = "Edit";
     setTimeout(() => {
