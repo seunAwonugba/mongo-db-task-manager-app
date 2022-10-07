@@ -1,112 +1,79 @@
 const { taskModel } = require("../db/models/tasks");
+const { asyncWrapper } = require("../middleware/async");
 
-const getTasks = async (req, res) => {
-    try {
-        const tasks = await taskModel.find({});
-        res.status(200).json({
+const getTasks = asyncWrapper(async (req, res) => {
+    const tasks = await taskModel.find({});
+    res.status(200).json({
+        success: true,
+        data: tasks,
+    });
+});
+
+const getTask = asyncWrapper(async (req, res) => {
+    const { id } = req.params;
+    const getTask = await taskModel.findById(id);
+
+    if (getTask) {
+        return res.status(200).json({
             success: true,
-            data: tasks,
+            data: getTask,
         });
-    } catch (err) {
-        res.status(500).json({
+    } else {
+        return res.status(404).json({
             success: false,
-            data: err,
+            data: "Resource not found",
         });
     }
-};
-const getTask = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const getTask = await taskModel.findById(id);
+});
 
-        if (getTask) {
-            return res.status(200).json({
-                success: true,
-                data: getTask,
-            });
-        } else {
-            return res.status(404).json({
-                success: false,
-                data: "Resource not found",
-            });
-        }
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            data: err,
-        });
-    }
-};
+const postTasks = asyncWrapper(async (req, res) => {
+    const createTask = await taskModel.create(req.body);
+    res.status(200).json({
+        success: true,
+        data: createTask,
+    });
+});
 
-const postTasks = async (req, res) => {
-    try {
-        const createTask = await taskModel.create(req.body);
-        res.status(200).json({
+const updateTask = asyncWrapper(async (req, res) => {
+    const { id } = req.params;
+    const body = req.body;
+    const options = {
+        new: true,
+        runValidators: true,
+        overwrite: true,
+    };
+
+    const updateTask = await taskModel.findByIdAndUpdate(id, body, options);
+
+    if (updateTask) {
+        return res.status(200).json({
             success: true,
-            data: createTask,
+            data: updateTask,
         });
-    } catch (err) {
-        res.status(500).json({
+    } else {
+        res.status(404).json({
             success: false,
-            data: err,
+            data: "Resource not found",
         });
+        return;
     }
-};
+});
 
-const updateTask = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const body = req.body;
-        const options = {
-            new: true,
-            runValidators: true,
-            overwrite: true,
-        };
+const deleteTask = asyncWrapper(async (req, res) => {
+    const { id } = req.params;
+    const deleteTask = await taskModel.findByIdAndDelete(id);
 
-        const updateTask = await taskModel.findByIdAndUpdate(id, body, options);
-
-        if (updateTask) {
-            return res.status(200).json({
-                success: true,
-                data: updateTask,
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                data: "Resource not found",
-            });
-            return;
-        }
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            data: err,
-        });
-    }
-};
-
-const deleteTask = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const deleteTask = await taskModel.findByIdAndDelete(id);
-
-        if (deleteTask) {
-            return res.status(200).json({
-                success: true,
-                data: `Task ${deleteTask.name} deleted successfully`,
-            });
-        } else {
-            return res.status(404).json({
-                success: true,
-                data: "Resource not found",
-            });
-        }
-    } catch (err) {
-        res.status(500).json({
+    if (deleteTask) {
+        return res.status(200).json({
             success: true,
-            data: err,
+            data: `Task ${deleteTask.name} deleted successfully`,
+        });
+    } else {
+        return res.status(404).json({
+            success: true,
+            data: "Resource not found",
         });
     }
-};
+});
 
 module.exports = { getTasks, postTasks, updateTask, deleteTask, getTask };

@@ -81,10 +81,10 @@ formDOM.addEventListener("submit", async (e) => {
         formAlertDOM.textContent = `success, task added`;
         formAlertDOM.classList.add("text-success");
     } catch (error) {
+        console.log(error.response);
         const errorCode = error.response.status;
         if (Number(errorCode) === 500) {
-            formAlertDOM.innerHTML =
-                error.response.data.data.errors.name.message;
+            formAlertDOM.innerHTML = "Add a task to submit";
         } else {
             formAlertDOM.innerHTML = error.response.data.data;
         }
