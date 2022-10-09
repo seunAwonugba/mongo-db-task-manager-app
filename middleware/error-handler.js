@@ -6,11 +6,12 @@ const errorHandler = (err, req, res, next) => {
             success: false,
             data: err.message,
         });
+    } else {
+        return res.status(500).json({
+            success: false,
+            data: "Invalid task id",
+        });
     }
-    return res.status(500).json({
-        success: false,
-        data: "Invalid task id",
-    });
 };
 
 module.exports = { errorHandler };

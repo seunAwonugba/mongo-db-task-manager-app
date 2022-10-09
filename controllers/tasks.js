@@ -40,6 +40,7 @@ const updateTask = asyncWrapper(async (req, res) => {
         runValidators: true,
         overwrite: true,
     };
+    console.log(id);
 
     const updateTask = await taskModel.findByIdAndUpdate(id, body, options);
 

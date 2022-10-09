@@ -2,7 +2,7 @@ const express = require("express");
 const { router } = require("./router/router");
 const app = express();
 const host = "localhost";
-const port = 8080;
+const port = process.env.PORT || 8080;
 const { connectDataBase } = require("./db/connect");
 require("dotenv").config();
 const { resourceNotFound } = require("./middleware/resourceNotFound");
