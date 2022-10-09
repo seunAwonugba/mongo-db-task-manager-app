@@ -6,6 +6,7 @@ const port = 8080;
 const { connectDataBase } = require("./db/connect");
 require("dotenv").config();
 const { resourceNotFound } = require("./middleware/resourceNotFound");
+const { errorHandler } = require("./middleware/error-handler");
 
 app.use(express.static("./public"));
 app.use(express.json());
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/v1/tasks", router);
 app.use(resourceNotFound);
+app.use(errorHandler);
 
 const startServer = async (connectionString) => {
     try {

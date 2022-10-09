@@ -54,10 +54,10 @@ editFormDOM.addEventListener("submit", async (e) => {
         formAlertDOM.textContent = `success, edited task`;
         formAlertDOM.classList.add("text-success");
     } catch (error) {
-        console.log(error.response);
         const errorCode = error.response.status;
         if (Number(errorCode == 500)) {
-            formAlertDOM.innerHTML = "add a task to edit";
+            formAlertDOM.innerHTML =
+                error.response.data.data.errors.name.message;
         } else {
             formAlertDOM.innerHTML = error.response.data.data;
         }

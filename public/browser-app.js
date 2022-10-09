@@ -41,7 +41,6 @@ const showTasks = async () => {
             })
             .join("");
         tasksDOM.innerHTML = allTasks;
-        console.log(allTasks);
     } catch (error) {
         tasksDOM.innerHTML = `${error}`;
     }
@@ -81,10 +80,10 @@ formDOM.addEventListener("submit", async (e) => {
         formAlertDOM.textContent = `success, task added`;
         formAlertDOM.classList.add("text-success");
     } catch (error) {
-        console.log(error.response);
         const errorCode = error.response.status;
         if (Number(errorCode) === 500) {
-            formAlertDOM.innerHTML = "Add a task to submit";
+            formAlertDOM.innerHTML =
+                error.response.data.data.errors.name.message;
         } else {
             formAlertDOM.innerHTML = error.response.data.data;
         }

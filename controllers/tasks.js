@@ -1,5 +1,6 @@
 const { taskModel } = require("../db/models/tasks");
-const { asyncWrapper } = require("../middleware/async");
+const { asyncWrapper } = require("../middleware/async-wrapper");
+const { create404ErrorMessage } = require("../errors/Custom404Error");
 
 const getTasks = asyncWrapper(async (req, res) => {
     const tasks = await taskModel.find({});
@@ -9,7 +10,7 @@ const getTasks = asyncWrapper(async (req, res) => {
     });
 });
 
-const getTask = asyncWrapper(async (req, res) => {
+const getTask = asyncWrapper(async (req, res, next) => {
     const { id } = req.params;
     const getTask = await taskModel.findById(id);
 
@@ -19,10 +20,7 @@ const getTask = asyncWrapper(async (req, res) => {
             data: getTask,
         });
     } else {
-        return res.status(404).json({
-            success: false,
-            data: "Resource not found",
-        });
+        return next(create404ErrorMessage("Resource not found", 404));
     }
 });
 
@@ -51,11 +49,7 @@ const updateTask = asyncWrapper(async (req, res) => {
             data: updateTask,
         });
     } else {
-        res.status(404).json({
-            success: false,
-            data: "Resource not found",
-        });
-        return;
+        return next(create404ErrorMessage("Resource not found", 404));
     }
 });
 
@@ -69,10 +63,7 @@ const deleteTask = asyncWrapper(async (req, res) => {
             data: `Task ${deleteTask.name} deleted successfully`,
         });
     } else {
-        return res.status(404).json({
-            success: true,
-            data: "Resource not found",
-        });
+        return next(create404ErrorMessage("Resource not found", 404));
     }
 });
 
