@@ -10,7 +10,6 @@ const showTasks = async () => {
     loadingDOM.style.visibility = "visible";
     try {
         const response = await axios.get("/api/v1/tasks");
-        console.log(response);
         if (response.length < 1) {
             tasksDOM.innerHTML =
                 '<h5 class="empty-list">No tasks in your list</h5>';
@@ -80,13 +79,7 @@ formDOM.addEventListener("submit", async (e) => {
         formAlertDOM.textContent = `success, task added`;
         formAlertDOM.classList.add("text-success");
     } catch (error) {
-        const errorCode = error.response.status;
-        if (Number(errorCode) === 500) {
-            formAlertDOM.innerHTML =
-                error.response.data.data.errors.name.message;
-        } else {
-            formAlertDOM.innerHTML = error.response.data.data;
-        }
+        formAlertDOM.innerHTML = error.response.data.data;
         formAlertDOM.style.display = "block";
     }
     setTimeout(() => {

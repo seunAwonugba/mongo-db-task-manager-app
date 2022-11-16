@@ -1,6 +1,5 @@
 const { Custom404Error } = require("../errors/Custom404Error");
 const errorHandler = (err, req, res, next) => {
-    console.log(err);
     if (err instanceof Custom404Error) {
         return res.status(err.statusCode).json({
             success: false,
@@ -9,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
     } else {
         return res.status(500).json({
             success: false,
-            data: "Invalid task id",
+            data: err.message,
         });
     }
 };
